@@ -20,7 +20,7 @@ import {
 import { Todo } from './entities/todo.entity';
 
 @ApiTags('Todo')
-@Controller('api/v1/todo')
+@Controller('api/v1/todos')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 

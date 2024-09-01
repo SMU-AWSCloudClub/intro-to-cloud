@@ -31,6 +31,15 @@ export class TodoController {
     status: 201,
     description: 'The todo has been successfully created.',
     type: Todo,
+    content: {
+      'application/json': {
+        example: {
+          id: 1,
+          description: 'Buy groceries',
+          completed: false,
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   create(@Body() createTodoDto: CreateTodoDto) {
@@ -43,6 +52,22 @@ export class TodoController {
     status: 200,
     description: 'Array of todo items',
     type: [Todo],
+    content: {
+      'application/json': {
+        example: [
+          {
+            id: 1,
+            description: 'Buy groceries',
+            completed: false,
+          },
+          {
+            id: 2,
+            description: 'Read a book',
+            completed: true,
+          },
+        ],
+      },
+    },
   })
   findAll() {
     return this.todoService.findAll();
@@ -51,7 +76,20 @@ export class TodoController {
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a single Todo item by ID' })
   @ApiParam({ name: 'id', description: 'ID of the todo item', type: String })
-  @ApiResponse({ status: 200, description: 'The found todo item', type: Todo })
+  @ApiResponse({
+    status: 200,
+    description: 'The found todo item',
+    type: Todo,
+    content: {
+      'application/json': {
+        example: {
+          id: 1,
+          description: 'Buy groceries',
+          completed: false,
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 404, description: 'Todo not found' })
   findOne(@Param('id') id: string) {
     return this.todoService.findOne(+id);
@@ -65,6 +103,15 @@ export class TodoController {
     status: 200,
     description: 'The updated todo item',
     type: Todo,
+    content: {
+      'application/json': {
+        example: {
+          id: 1,
+          description: 'Buy groceries',
+          completed: true,
+        },
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Todo not found' })
   update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
@@ -74,7 +121,17 @@ export class TodoController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a Todo item by ID' })
   @ApiParam({ name: 'id', description: 'ID of the todo item', type: String })
-  @ApiResponse({ status: 200, description: 'The todo item has been deleted' })
+  @ApiResponse({
+    status: 200,
+    description: 'The todo item has been deleted',
+    content: {
+      'application/json': {
+        example: {
+          message: 'Todo item successfully deleted',
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 404, description: 'Todo not found' })
   remove(@Param('id') id: string) {
     return this.todoService.remove(+id);

@@ -1,0 +1,12 @@
+node_modules
+dist
+Dockerfile
+docker-compose.yml
+.dockerignore
+.git
+
+# this is ignored here as we will be injecting the credential values
+# using an EC2 user script rather than storing this file within the docker image
+# generally speaking, it is a really REALLY bad idea to add a .env into a docker image
+# ref: https://medium.com/@mccode/dont-embed-configuration-or-secrets-in-docker-images-7b2e0f916fdd
+.env

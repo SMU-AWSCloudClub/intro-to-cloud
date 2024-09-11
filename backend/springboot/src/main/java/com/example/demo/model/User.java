@@ -2,6 +2,10 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -15,6 +19,10 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Todo> todos;
 
     // Getters and Setters
     public Long getId() {

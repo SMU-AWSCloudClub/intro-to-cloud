@@ -51,8 +51,13 @@ resource "aws_iam_user_policy" "ec2_policy" {
         "Effect" : "Allow",
         "Action" : [
           "ec2:RunInstances",
+          "ec2:StartInstances",
           "ec2:TerminateInstances",
-          "ec2:DescribeInstances"
+          "ec2:DescribeInstances",
+          "ec2:DescribeVpcs",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DescribeKeyPairs",
         ],
         "Resource" : "*",
         "Condition" : {

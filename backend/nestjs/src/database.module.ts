@@ -19,7 +19,9 @@ import { Todo } from './todo/entities/todo.entity';
         entities: [User, Todo],
         // usually recommended to be set to false in favour of migrations, set to true here for convenience when starting up mysql
         // ref: https://orkhan.gitbook.io/typeorm/docs/faq#how-do-i-update-a-database-schema
-        synchronize: configService.get<boolean>('DATABASE_SYNC') || false,
+        synchronize: configService.get<boolean>('DATABASE_SYNC') || true,
+        retryAttempts: 10, // this ensures the db will be up upon fresh starts (ie: local docker compose)
+        retryDelay: 3000,
       }),
       inject: [ConfigService],
     }),

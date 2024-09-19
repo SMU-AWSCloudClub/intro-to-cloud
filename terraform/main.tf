@@ -49,25 +49,21 @@ resource "aws_iam_user_policy" "ec2_policy" {
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Action" : [
-          "ec2:RunInstances",
-          "ec2:StartInstances",
-          "ec2:TerminateInstances",
-          "ec2:DescribeInstances",
-          "ec2:DescribeVpcs",
-          "ec2:DescribeSubnets",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeKeyPairs",
-        ],
-        "Resource" : "*",
+        "Action" : "*",
+        "Resource" : "arn:aws:ec2:::smuworkshop-${each.key}/*",
         "Condition" : {
           "StringEquals" : {
             "ec2:InstanceType" : "t2.micro"
-          },
-          "NumericLessThanEquals" : {
-            "ec2:InstanceCount" : "1"
           }
         }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : ["ec2:DescribeKeyPairs", "ec2:CreateKeyPairs", "ec2:DescribeVpcs",
+          "ec2:CreateVpcs", "ec2:DescribeSubnets", "ec2:CreateSubnets", "ec2:DescribeImages",
+          "ec2:CreateImages", "ec2:DescribeSecurityGroups", "ec2:RunInstances", "ec2:CreateTags",
+        "ec2:DescribeInstances", "ec2:DescribeInstanceStatus"],
+        "Resource" : "*",
       }
     ]
   })
@@ -84,25 +80,12 @@ resource "aws_iam_user_policy" "aurora_serverless_policy" {
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Action" : [
-          "rds:CreateDBCluster",
-          "rds:CreateDBInstance",
-          "rds:DeleteDBCluster",
-          "rds:DeleteDBInstance",
-          "rds:DescribeDBClusters",
-          "rds:DescribeDBInstances"
-        ],
-        "Resource" : "*",
+        "Action" : "*",
+        "Resource" : "arn:aws:rds:::smuworkshop-${each.key}/*",
         "Condition" : {
-          "StringLike" : {
-            "rds:DatabaseName" : "smuworkshop-${each.key}"
-          },
           "StringEquals" : {
             "rds:Engine" : "aurora",
             "rds:DBClusterClass" : "db.serverless"
-          },
-          "NumericLessThanEquals" : {
-            "ec2:InstanceCount" : "1"
           }
         }
       }
@@ -118,31 +101,18 @@ resource "aws_iam_user_policy" "workshop_student_s3" {
   user     = aws_iam_user.students[each.key].name
 
   policy = jsonencode({
-    Version : "2012-10-17",
-    Statement : [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        Effect : "Allow",
-        Action : "*",
-        Resource : "arn:aws:s3:::smuworkshop-${each.key}"
+        "Effect" : "Allow",
+        "Action" : ["s3:CreateBucket", "s3:PutEncryptionConfiguration", "s3:PutBucketPolicy", "s3:PutBucketAcl", "s3:ListAllMyBuckets"],
+        "Resource" : "*"
       },
       {
-        Effect : "Allow",
-        Action : ["s3:ListAllMyBuckets", ],
-        Resource : "*"
-      },
-      {
-        Effect : "Allow",
-        Action : "*",
-        Resource : "arn:aws:s3:::smuworkshop-${each.key}/*"
-      },
-      {
-        Effect : "Allow",
-        Action : [
-          "iam:ListRoles",
-        ],
-        Resource : "*"
-      },
-
+        "Effect" : "Allow",
+        "Action" : "*",
+        "Resource" : "arn:aws:s3:::smuworkshop-${each.key}/*"
+      }
     ]
   })
 }

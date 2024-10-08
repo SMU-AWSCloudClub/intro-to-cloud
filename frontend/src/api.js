@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+const API_BASE_URL = `http://${import.meta.env.VITE_EC2_ADDRESS}/api/v1`;
 
 // Fetch all users
 export const getUsers = async () => {

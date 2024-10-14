@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Todo } from './entities/todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class TodoService {
-  create(createTodoDto: CreateTodoDto) {
-    return 'This action adds a new todo';
+  constructor(
+    @InjectRepository(Todo)
+    private readonly todoRepository: Repository<Todo>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  async create(createTodoDto: CreateTodoDto): Promise<Todo> {
+    const user = await this.userRepository.findOne({
+      where: { id: createTodoDto.userId },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const todo = this.todoRepository.create({
+      ...createTodoDto,
+      user, // Associate the Todo with the User
+    });
+
+    return this.todoRepository.save(todo);
   }
 
-  findAll() {
-    return `This action returns all todo`;
+  async findAll(): Promise<Todo[]> {
+    return this.todoRepository.find({ relations: ['user'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} todo`;
+  async findOne(id: number): Promise<Todo> {
+    return this.todoRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
-    return `This action updates a #${id} todo`;
+  async update(
+    id: number,
+    updateTodoDto: Partial<CreateTodoDto>,
+  ): Promise<Todo> {
+    await this.todoRepository.update(id, updateTodoDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} todo`;
+  async remove(id: number): Promise<void> {
+    await this.todoRepository.delete(id);
   }
 }

@@ -1,7 +1,7 @@
-const API_BASE_URL = `http://${import.meta.env.VITE_EC2_ADDRESS}/api/v1`;
+const OP = `http://${import.meta.env.VITE_EC2_ADDRESS}/api/v1`;
 
 // Fetch all users
-export const getUsers = async () => {
+export const getUsers = async (API_BASE_URL) => {
   const response = await fetch(`${API_BASE_URL}/users`);
   if (!response.ok) {
     throw new Error('Failed to fetch users');
@@ -10,7 +10,7 @@ export const getUsers = async () => {
 };
 
 // Add a new user with name and email
-export const addUser = async (user) => {
+export const addUser = async (API_BASE_URL, user) => {
   const response = await fetch(`${API_BASE_URL}/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -23,7 +23,7 @@ export const addUser = async (user) => {
 };
 
 // Update a user by ID with name and email (similar to addUser but using PATCH)
-export const updateUser = async (id, user) => {
+export const updateUser = async (API_BASE_URL, id, user) => {
   const response = await fetch(`${API_BASE_URL}/users/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +36,7 @@ export const updateUser = async (id, user) => {
 };
 
 // Delete a user by ID
-export const deleteUser = async (id) => {
+export const deleteUser = async (API_BASE_URL, id) => {
   const response = await fetch(`${API_BASE_URL}/users/${id}`, { method: 'DELETE' });
   if (!response.ok) {
     throw new Error('Failed to delete user');
@@ -44,7 +44,7 @@ export const deleteUser = async (id) => {
 };
 
 // Fetch todos for a specific user
-export const getTodosByUserId = async (userId) => {
+export const getTodosByUserId = async (API_BASE_URL, userId) => {
   const response = await fetch(`${API_BASE_URL}/todos?userId=${userId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch todos for user');
@@ -53,7 +53,7 @@ export const getTodosByUserId = async (userId) => {
 };
 
 // Add a new todo (task) for a user
-export const addTodo = async (todo) => {
+export const addTodo = async (API_BASE_URL, todo) => {
   const response = await fetch(`${API_BASE_URL}/todos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -66,7 +66,7 @@ export const addTodo = async (todo) => {
 };
 
 // Fetch all todos
-export const getTodos = async () => {
+export const getTodos = async (API_BASE_URL) => {
   const response = await fetch(`${API_BASE_URL}/todos`);
   if (!response.ok) {
     throw new Error('Failed to fetch todos');
@@ -75,7 +75,7 @@ export const getTodos = async () => {
 };
 
 // Delete a todo by ID
-export const deleteTodo = async (id) => {
+export const deleteTodo = async (API_BASE_URL, id) => {
   const response = await fetch(`${API_BASE_URL}/todos/${id}`, { method: 'DELETE' });
   if (!response.ok) {
     throw new Error('Failed to delete todo');

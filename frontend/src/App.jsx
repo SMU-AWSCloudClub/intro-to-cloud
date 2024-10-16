@@ -1,55 +1,38 @@
-import { useState, useEffect } from 'react';
-import UserList from './components/UserList';
-import UserModal from './components/UserModal';
-import ConfirmationModal from './components/ConfirmationModal';
-import { getUsers, addUser, deleteUser } from './api';
+import React from 'react';
+import SpringBootPage from './pages/SpringBootPage'
+import NestJsPage from './pages/NestJsPage'
+import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [showUserModal, setShowUserModal] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  useEffect(() => {
-    getUsers().then(data => setUsers(data));
-  }, []);
-
-  const handleAddUser = (user) => {
-    addUser(user).then(newUser => setUsers([...users, newUser]));
-    setShowUserModal(false);
-  };
-
-  const handleDeleteUser = (id) => {
-    deleteUser(id).then(() => setUsers(users.filter(user => user.id !== id)));
-    setShowConfirmModal(false);
-  };
-
   return (
-    <div className="container">
-      <h1>To-Do App</h1>
-      <button className="btn btn-primary" onClick={() => setShowUserModal(true)}>
-        Add User
-      </button>
-      
-      <UserList 
-        users={users} 
-        setSelectedUser={setSelectedUser} 
-        setShowConfirmModal={setShowConfirmModal}
-      />
-      
-      <UserModal 
-        show={showUserModal} 
-        handleClose={() => setShowUserModal(false)} 
-        handleAddUser={handleAddUser} 
-      />
-      
-      <ConfirmationModal 
-        show={showConfirmModal} 
-        handleClose={() => setShowConfirmModal(false)} 
-        handleConfirm={() => handleDeleteUser(selectedUser.id)}
-        user={selectedUser}
-      />
-    </div>
+    <Router>
+      <div>
+        {/* Topbar */}
+        <div className="navbar">
+          <div className="nav-links">
+          <NavLink 
+              to="/springboot" 
+              className={({ isActive }) => (isActive ? 'active-link' : '')}
+            >
+              Spring Boot
+            </NavLink>
+            <NavLink 
+              to="/nestjs" 
+              className={({ isActive }) => (isActive ? 'active-link' : '')}
+            >
+              NestJS
+            </NavLink>
+          </div>
+        </div>
+
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<Navigate to="/springboot" replace />} />
+          <Route path="/springboot" element={<SpringBootPage />} />
+          <Route path="/nestjs" element={<NestJsPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -23,18 +23,18 @@ function UserModal({ show, handleClose, handleAddUser }) {
         <Modal.Title>Add User</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <input 
-          type="text" 
-          placeholder="Name" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           className="form-control"
         />
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="form-control mt-3"
         />
       </Modal.Body>

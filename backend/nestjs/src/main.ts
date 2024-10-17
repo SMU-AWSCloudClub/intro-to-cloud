@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
+  app.setGlobalPrefix('nestjs');
+
   // Set up Swagger
   const config = new DocumentBuilder()
     .setTitle('Intro to Cloud Deployment')
@@ -17,7 +19,10 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+
+  // we need to do this because the global prefix is not appended for the swagger module
+  SwaggerModule.setup('nestjs/api-docs', app, document);
+
 
   await app.listen(3000);
 }
